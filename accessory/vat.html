@@ -2,14 +2,18 @@
 <html>
 <head>
     <title>VAT Calculator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
         function calculateVAT() {
             var grossPrice = parseFloat(document.getElementById("grossPrice").value);
             var vatRate = 0.07; // 7% VAT rate
             var vatAmount = grossPrice * vatRate;
             var netAmount = vatAmount + grossPrice
-            document.getElementById("vatAmount").textContent = vatAmount.toFixed(2);
-            document.getElementById("netAmount").textContent = netAmount.toFixed(2);
+            $('#vatAmount').html(vatAmount.toFixed(2))
+           // document.getElementById("vatAmount").textContent = vatAmount.toFixed(2);
+            $('#netAmount').html(netAmount.toFixed(2))
+           //document.getElementById("netAmount").textContent = netAmount.toFixed(2);
             console.log(grossPrice, vatAmount, netAmount)
         }
     </script>

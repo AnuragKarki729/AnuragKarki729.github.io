@@ -19,6 +19,8 @@
     </style>
  
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <title>Car Accessories</title>
 </head>
  
@@ -40,7 +42,7 @@
         <button type="button" onclick="addToProductList()">Add</button>
     </form>
     <br>
-    <table>
+    <table id = "carAccess">
         <thead>
             <tr>
                 <th>Accessory</th>
@@ -49,7 +51,7 @@
             </tr>
             
         </thead>
-        <tbody  id="productList">
+        <tbody>
             <!-- Product list items will be added here dynamically -->
             
         </tbody>
@@ -78,33 +80,35 @@
         var price = 0
         var vat = 0
         var totalPrice = 0
-        function addToProductList() {
-            var accessorySelect = document.getElementById("accessory");
-            var accessoryOption = accessorySelect.options[accessorySelect.selectedIndex];
-            var accessoryName = accessoryOption.text;
-            var accessoryPrice = accessoryOption.value;
-            var amountInput = document.getElementById("amount");
-            var amount = amountInput.value;
- 
-            var productList = document.getElementById("productList");
-            var newRow = productList.insertRow(-1);
-            var accessoryCell = newRow.insertCell(0);
-            var amountCell = newRow.insertCell(1);
-            var priceCell = newRow.insertCell(2)
-            
- 
-            accessoryCell.innerHTML = accessoryName;
-            amountCell.innerHTML = amount;
-            priceCell.innerHTML = accessoryPrice * amount;
-            price = price + (accessoryPrice * amount);
-            vat  = 0.07*price
-            totalPrice = price + vat
-            document.getElementById("Price").innerHTML = price.toFixed(2);
-            document.getElementById("VAT").innerHTML = vat.toFixed(2);
-            document.getElementById("totalPrice").innerHTML = totalPrice.toFixed(2);
-        }
- 
         
+ 
+        function addToProductList() {
+            var accessoryOption = $('#accessory option:selected');
+            var accessoryName = accessoryOption.text();
+            var accessoryPrice = parseFloat(accessoryOption.val());
+            var amount = $('#amount').val();
+
+            var price = parseFloat($("#Price").text()) || 0;
+            price +=(accessoryPrice * amount)
+            $("#Price").text(price.toFixed(2));
+
+            var vat = parseFloat($("#VAT").text()) || 0
+            vat += (accessoryPrice * amount) * 0.07
+            $("#VAT").text(vat.toFixed(2));
+
+            var totalPrice = parseFloat($("#totalPrice").text()) || 0
+            totalPrice = price + vat
+            $("#totalPrice").text(totalPrice.toFixed(2));
+
+
+            const tbodyRef = $('#carAccess tbody')
+            tbodyRef.before(
+            `<tr>
+            <td>${accessoryName}</td>
+            <td>${amount}</td>
+            <td>${accessoryPrice*amount}</td>
+            </tr>`)
+        }
     </script>
 </body>
  
