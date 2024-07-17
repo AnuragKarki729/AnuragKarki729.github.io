@@ -1,8 +1,37 @@
 <!DOCTYPE html>
 <html>
+     
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Accessories</title>
     <style>
-        table {
-            width: 20vw;
+        .header {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-weight: 600;
+        }
+    
+        .container {
+            width: 100%;
+            margin: 40px;
+            font-family: Georgia;
+            font-weight: bold;
+        }
+
+        
+        .table-container {
+            width: 60%;
+            font-family: Georgia;
+            font-weight: normal;
+        }
+
+        .table {
+            border-spacing: 5px;
+            border-collapse: collapse;
+            width: 50%;
         }
         table tr:nth-child(even) {
             background-color: #f2f2f2;
@@ -11,68 +40,206 @@
         table tr:nth-child(odd) {
             background-color: #ffffff;
         }
- 
+    
         table tfoot {
             font-weight: bold;
         }
- 
+
+        th {
+            background-color: rgb(184, 212, 231);
+            color: darkblue;
+            border: solid #000000 1px;
+        }
+        
+        td {
+            vertical-align: top;
+        }
+        
+        #sub-total {
+            border-top: solid #000 1px;
+        }
+        
+        #bottom-line {
+            border-bottom: solid #000 1px;
+        }
+        
+        .data {
+            border-left: solid #000000 1px;
+            border-right: solid #000000 1px;
+        }
+        
+        .data2 {
+            border-right: solid #000000 1px;
+        }
+        
+        p.i {
+            font-style: italic;
+          }
+        
+        .r {
+            text-align: right;
+        }
+        
+        .cen {
+            text-align: center;
+        }
+
+        
+        .center {
+            margin: auto;
+          }
+        
+        .colo {
+            font-weight: bold;
+            color: darkblue;
+        }
+        
+        .thick {
+            font-weight: bold;
+        }
+        .logo{
+            position: absolute;
+            margin-right: 40px;
+            top: 20px;
+        }
+        .tab { 
+            display:inline-block; 
+            margin-left: 40px; 
+        }
     </style>
- 
-<head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <title>Car Accessories</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
  
 <body>
-    <h1>Car Accessories using JQUERY</h1>
- 
-    <form id="accessoryForm">
-        <label for="accessory">Select an accessory:</label>
-        <select id="accessory">
-            <option value="500">Car Cover</option>
-            <option value="2000">Floor Mats</option>
-            <option value="600">Seat Covers</option>
-            <option value="20">Phone Holder</option>
-        </select>
+    <div class = "container">
+        <h1 class = "header">Car Accessories</h1>
+        <h1 class = "header">Quotation</h1>
+        <header class = "header">
+            <h2>Anurag Karki</h2>
+        </header>
+        <img src="img\quote-pic.png"
+                    style="width:200px;height:200px;" class="logo">
+        <p class = "cen">
+            6411318
+            <br>Viewpoint Complex
+            <br>Samut Prakan
+            <br>THAILAND
+            <br>10560
+            <br>
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Customer:</h3>
+                <b>John Doe</b><br>
+                Dhobighat, Nepal<br>
+                Lalitpur, Nepal<br>
+            </div>
+            <div class="col-sm-4">
+                <h3>Ship to:</h3>
+                <b>John Doe</b><br>
+                Dhobighat, Nepal<br>
+                Lalitpur, Nepal<br>
+            </div>
+            <div class="col-sm-4">
+                <h3>Payment here:</h3>
+                <img src = "img\qr.png" height="100"><br>
+                <br>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class ="container">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddItem">Add Item</button>
         <br>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" min="1" value="1">
         <br>
-        <button type="button" onclick="addToProductList()">Add</button>
-    </form>
-    <br>
-    <table id = "carAccess">
-        <thead>
-            <tr>
-                <th>Accessory</th>
-                <th>Amount</th>
-                <th>Price</th>
-            </tr>
+        <div class = "table-container">
             
-        </thead>
-        <tbody>
-            <!-- Product list items will be added here dynamically -->
-            
-        </tbody>
-        <tfoot>
-            <tr>
-            <td colspan="2">Price:</td>
-            <td id="Price">0</td>
-            </tr>
-            <tr>
-                <td colspan="2">Total VAT:</td>
-                <td id="VAT">0</td>
-            </tr>
-            <tr>
-                <td colspan="2">Total Price:</td>
-                <td id="totalPrice">0</td>
-            </tr>
-        </tfoot>
-    </table>
-    
-            
-            
+            <table id = "carAccess" class = "table">
+                <thead>
+                    <tr>
+                        <th>Accessory</th>
+                        <th>Amount</th>
+                        <th>Price</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    <!-- Product list items will be added here dynamically -->
+                    
+                </tbody>
+                <tfoot>
+                    <tr>
+                    <td colspan="2">Subtotal:</td>
+                    <td id="Price">0</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Total VAT (7%):</td>
+                        <td id="VAT">0</td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2">Shipping and Handling:</td>
+                        <td id="shipping">0</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Total Price:</td>
+                        <td id="totalPrice">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <br>
+            <br>
+            <p style="font-style: italic;">5% Shipping charge on Total below 10000 THB</p>
+            <p style="font-style: italic;">2% Shipping Charge on Total 10000 THB and above</p>
+            <p style="font-style: italic;">THANK YOU FOR DOING BUSINESS WITH US</p>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog" id="AddItem">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="ModalLabel">Add Item</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="accessorySelect">Select an accessory:</label>
+                    <select id="accessorySelect" onchange="updatePrice()">
+                        <option value="" disabled selected>Choose an item</option>
+                        <option value="500">Car Cover</option>
+                        <option value="2000">Floor Mats</option>
+                        <option value="600">Seat Covers</option>
+                        <option value="20">Phone Holder</option>
+                    </select>
+                    <br>
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" min="1" value="1" onchange="updatePrice()">
+                    <br>
+                    <label for="price">Price per Unit:</label>
+                    <input type="number" id="price" readonly>
+                    <br>
+                    <label for="totalPrice">Total Price:</label>
+                    <input type="number" id="totalprice" readonly>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id = "save" class="btn btn-primary" onclick="addToProductList()" disabled>Save New Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
         
     
  
@@ -80,36 +247,115 @@
         var price = 0
         var vat = 0
         var totalPrice = 0
+        var shipping = 0
         
+        function updatePrice() {
+            var selectedPrice = ($('#accessorySelect option:selected').val());
+            $('#price').val(selectedPrice);
+            enableSave();
+            var quantity = $('#amount').val();
+            var Total = selectedPrice * quantity;
+            $('#totalprice').val(Total);
+        }
+
+        function enableSave(){
+            var selectedAccessory = $('#accessorySelect option:selected').val();
+            $('#save').prop('disabled', !selectedAccessory);
+        }
+
+
+    
+
  
         function addToProductList() {
-            var accessoryOption = $('#accessory option:selected');
+            var accessoryOption = $('#accessorySelect option:selected');
             var accessoryName = accessoryOption.text();
             var accessoryPrice = parseFloat(accessoryOption.val());
-            var amount = $('#amount').val();
+            var amount = parseInt($('#amount').val());
 
-            var price = parseFloat($("#Price").text()) || 0;
-            price +=(accessoryPrice * amount)
+            var existingRow = $(`#carAccess tbody tr:contains(${accessoryName})`);
+            
+            if (existingRow.length) {
+                
+                var currentAmount = parseInt(existingRow.find('td:eq(1)').text());
+                var newAmount = currentAmount + amount;
+                existingRow.find('td:eq(1)').text(newAmount);
+                existingRow.find('td:eq(2)').text((newAmount * accessoryPrice).toFixed(2));
+                updateTotals(accessoryPrice * amount, (accessoryPrice * amount) * 0.07);            
+            } else {
+                // Add new row
+                var rowId = new Date().getTime();
+                $('#carAccess tbody').append(
+                    `<tr id="row-${rowId}">
+                        <td>${accessoryName}</td>
+                        <td>${amount}</td>
+                        <td>${(accessoryPrice * amount).toFixed(2)}</td>
+                        <td><button class="btn btn-danger" onclick="AmountToRemove(${rowId},${accessoryPrice}, ${amount})">Delete</button></td>
+                    </tr>`
+                );
+                updateTotals(accessoryPrice * amount, (accessoryPrice * amount) * 0.07);
+            }           
+        }
+
+        function AmountToRemove(rowId, accessoryPrice, amount) {
+            var amountToRemove = prompt("Enter the amount to delete:", amount);
+            if (amountToRemove !== null) {
+                amountToRemove = parseInt(amountToRemove);
+                if (amountToRemove > 0) {
+                    removeFromProductList(rowId, accessoryPrice, amountToRemove);
+                }
+            }
+        }
+
+        function removeFromProductList(rowId, accessoryPrice, amountToRemove) {
+            var row = $(`#row-${rowId}`);
+            var currentAmount = parseInt(row.find('td:eq(1)').text());
+            
+            if (amountToRemove>=currentAmount){
+                amountToRemove = currentAmount;
+                row.remove();
+            }else{
+                var newAmount = currentAmount - amountToRemove;
+                row.find('td:eq(1)').text(newAmount);
+                row.find('td:eq(2)').text((newAmount * accessoryPrice).toFixed(2));
+            }
+
+            updateTotals(-(accessoryPrice * amountToRemove), -(accessoryPrice * amountToRemove) * 0.07);
+        }
+
+        function updateTotals(newPrice, newVAT){
+            price = parseFloat($("#Price").text()) || 0;
+            price += newPrice;
             $("#Price").text(price.toFixed(2));
 
-            var vat = parseFloat($("#VAT").text()) || 0
-            vat += (accessoryPrice * amount) * 0.07
+            vat = parseFloat($("#VAT").text()) || 0;
+            vat += newVAT;
             $("#VAT").text(vat.toFixed(2));
 
-            var totalPrice = parseFloat($("#totalPrice").text()) || 0
-            totalPrice = price + vat
+
+            totalPrice = price + vat;
             $("#totalPrice").text(totalPrice.toFixed(2));
-
-
-            const tbodyRef = $('#carAccess tbody')
-            tbodyRef.before(
-            `<tr>
-            <td>${accessoryName}</td>
-            <td>${amount}</td>
-            <td>${accessoryPrice*amount}</td>
-            </tr>`)
+            
+            if (totalPrice > 10000){
+                var shipping = 0.02 * totalPrice;
+                $("#shipping").text(shipping.toFixed(2));
+            }else{
+                var shipping = 0.05 * totalPrice;
+                $("#shipping").text(shipping.toFixed(2));
+            }
         }
     </script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    
+    
 </body>
  
 </html>
