@@ -1,24 +1,12 @@
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
-from keras.layers import Dense 
-from keras.layers import Dropout
-from keras.layers import Flatten
-from keras.layers import Conv2D
-from keras.layers import MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.callbacks import ModelCheckpoint, EarlyStopping
-from keras import backend as K
 from keras.utils import image_dataset_from_directory
-import shutil
-import os
 from keras.src.legacy.preprocessing.image import ImageDataGenerator
+import os
 
-
-subset_val_dir = './TrainTest/ValidationSubset'
-os.makedirs(subset_val_dir, exist_ok=True)
-
-subset_test_dir = './TrainTest/TestSubset'
-os.makedirs(subset_test_dir, exist_ok=True)
 
 # dataset = './Images'
 # output = './TrainTest'
@@ -65,82 +53,22 @@ os.makedirs(subset_test_dir, exist_ok=True)
 
 # print("Dataset split into training, validation, and test sets.")
 
+# Directories for full datasets
 train_dir = './TrainTest/Train'
 val_dir = './TrainTest/Validation'
 test_dir = './TrainTest/Test'
 
-original_train_dir = './TrainTest/Train'
-subset_train_dir = './TrainTest/TrainSubset'
-os.makedirs(subset_train_dir, exist_ok=True)
-
-
-breed_dirs = [f for f in os.listdir(original_train_dir) if os.path.isdir(os.path.join(original_train_dir, f))]
-import random
-for breed in breed_dirs:
-    os.makedirs(os.path.join(subset_train_dir, breed), exist_ok=True)
-    
-    # Get all images for the breed
-    breed_path = os.path.join(train_dir, breed)
-    images = os.listdir(breed_path)
-    
-    # Randomly select 5 images
-    selected_images = random.sample(images, min(5, len(images)))
-    
-    # Copy the selected images to the subset directory
-    for image in selected_images:
-        shutil.copy(os.path.join(breed_path, image), os.path.join(subset_train_dir, breed, image))
-
-print("Subset of images created.")
-
-test_breed_dirs = [f for f in os.listdir(test_dir) if os.path.isdir(os.path.join(test_dir, f))]
-
-# For each breed, copy 5 images to the validation subset directory
-for breed in test_breed_dirs:
-    os.makedirs(os.path.join(subset_val_dir, breed), exist_ok=True)
-    
-    # Get all images for the breed in the validation set
-    breed_path = os.path.join(test_dir, breed)
-    images = os.listdir(breed_path)
-    
-    # Randomly select 5 images
-    selected_images = random.sample(images, min(5, len(images)))
-    
-    # Copy the selected images to the validation subset directory
-    for image in selected_images:
-        shutil.copy(os.path.join(breed_path, image), os.path.join(subset_val_dir, breed, image))
-
-print("Validation subset of images created.")
-
-val_breed_dirs = [f for f in os.listdir(val_dir) if os.path.isdir(os.path.join(val_dir, f))]
-
-# For each breed, copy 5 images to the validation subset directory
-for breed in val_breed_dirs:
-    os.makedirs(os.path.join(subset_test_dir, breed), exist_ok=True)
-    
-    # Get all images for the breed in the validation set
-    breed_path = os.path.join(val_dir, breed)
-    images = os.listdir(breed_path)
-    
-    # Randomly select 5 images
-    selected_images = random.sample(images, min(5, len(images)))
-    
-    # Copy the selected images to the validation subset directory
-    for image in selected_images:
-        shutil.copy(os.path.join(breed_path, image), os.path.join(subset_test_dir, breed, image))
-
-print("Validation subset of Test images created.")
-
-
-batch_size = 32
+# Image size and batch size
 img_height = 150
 img_width = 150
+batch_size = 32
 
+# Load the full datasets
 train_dataset = image_dataset_from_directory(train_dir, image_size=(img_height, img_width), batch_size=batch_size)
-
 val_dataset = image_dataset_from_directory(val_dir, image_size=(img_height, img_width), batch_size=batch_size)
-
 test_dataset = image_dataset_from_directory(test_dir, image_size=(img_height, img_width), batch_size=batch_size)
 
+# Data augmentation
 data_augmentation = ImageDataGenerator(
     rotation_range=40,
     width_shift_range=0.2,
@@ -151,14 +79,15 @@ data_augmentation = ImageDataGenerator(
     fill_mode='nearest'
 )
 
+# Apply augmentation on the training dataset
 train_dataset_augmented = data_augmentation.flow_from_directory(
-    subset_train_dir, 
+    train_dir, 
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode='sparse'
 )
 
-# Combine the original dataset with the augmented dataset
+# Convert the augmented dataset to a TensorFlow dataset
 augmented_dataset = tf.data.Dataset.from_generator(
     lambda: ((x, tf.cast(y, tf.int32)) for x, y in train_dataset_augmented),
     output_signature=(
@@ -167,15 +96,13 @@ augmented_dataset = tf.data.Dataset.from_generator(
     )
 )
 
+# Combine the original training dataset with the augmented dataset
 combined_train_dataset = train_dataset.concatenate(augmented_dataset)
 
-# Shuffle and repeat the combined dataset
+# Shuffle the combined dataset
 combined_train_dataset = combined_train_dataset.shuffle(1000).repeat()
 
-train_subset_dataset = image_dataset_from_directory(subset_train_dir, image_size=(img_height, img_width), batch_size=batch_size)
-
-val_subset_dataset = image_dataset_from_directory(subset_val_dir, image_size=(img_height, img_width), batch_size=batch_size)
-
+# Define the model
 model = Sequential([
     Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3), padding='same'),
     MaxPooling2D((2, 2)),
@@ -183,14 +110,14 @@ model = Sequential([
     MaxPooling2D((2, 2)),
     Conv2D(128, (3, 3), activation='relu', padding='same'),
     MaxPooling2D((2, 2)),
-    Conv2D(256, (3, 3), activation='relu', padding='same'),  
+    Conv2D(256, (3, 3), activation='relu', padding='same'),
     MaxPooling2D((2, 2)),
-    Conv2D(512, (3, 3), activation='relu', padding='same'), 
+    Conv2D(512, (3, 3), activation='relu', padding='same'),
     MaxPooling2D((2, 2)),
     Flatten(),
     Dense(512, activation='relu'),
     Dropout(0.5),
-    Dense(len(train_subset_dataset.class_names), activation='softmax')
+    Dense(len(train_dataset.class_names), activation='softmax')
 ])
 
 model.compile(optimizer='adam',
@@ -199,27 +126,28 @@ model.compile(optimizer='adam',
 
 print(model.summary())
 
+# Callbacks for checkpointing and early stopping
 checkpoint = ModelCheckpoint(
-    'DogPredictionModel.keras',  # Path where the model will be saved
-    monitor='val_accuracy',  
-    save_best_only=True,  
-    mode='max',  
-    verbose=1  
+    'DogPredictionModel.keras',
+    monitor='val_accuracy',
+    save_best_only=True,
+    mode='max',
+    verbose=1
 )
-
 
 early_stopping = EarlyStopping(
-    monitor='val_loss', 
-    patience=10,  
-    restore_best_weights=False,  
-    mode='min', 
-    verbose=1  
+    monitor='val_loss',
+    patience=10,
+    restore_best_weights=False,
+    mode='min',
+    verbose=1
 )
 
+# Train the model using the full datasets
 history = model.fit(
     combined_train_dataset,
-    validation_data=val_subset_dataset,  
+    validation_data=val_dataset,
     epochs=10,
-    steps_per_epoch=len(train_dataset_augmented),  
+    steps_per_epoch=len(train_dataset_augmented),
     callbacks=[checkpoint, early_stopping]
 )
